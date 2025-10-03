@@ -13,6 +13,26 @@
       .toc li { display:inline; margin-right:1rem; }
       .toc a { text-decoration:none; border-bottom:1px dashed; }
       h3 { scroll-margin-top: 80px; }
+
+      .badge{display:inline-flex;align-items:center;gap:.35rem;padding:.12rem .5rem;border-radius:.5rem;
+        font-size:.85em;line-height:1.2;border:1px solid transparent;vertical-align:middle;white-space:nowrap}
+      .badge i{font-size:.9em}
+      
+      /* 査読あり（緑） */
+      .badge.peer{background:#e8f7ec;border-color:#cfe8d6}
+      
+      /* 掲載決定（黄） */
+      .badge.accepted{background:#fff2cc;border-color:#f2d98f}
+      
+      /* 投稿中/査読中（青） */
+      .badge.under{background:#e7f0ff;border-color:#c9dcff}
+      
+      /* ダークモードの視認性ちょい上げ（任意） */
+      @media (prefers-color-scheme: dark){
+        .badge.peer{background:#22482f22;border-color:#2fa45a66}
+        .badge.accepted{background:#7a5c0022;border-color:#f2d98f66}
+        .badge.under{background:#0b3a7a22;border-color:#7aa2ff66}
+      }
     </style>
   </head>
   <body class="is-preload">
@@ -45,7 +65,7 @@
           <div class="container">
             <header class="major">
               <h2>Publications</h2>
-            </header>
+            </er>
 
             <nav class="toc">
               <ul>
@@ -82,6 +102,9 @@
                 <strong>Quantification of droplet and contact transmission risks among elementary school students based on network analyses using video-recorded data</strong><br>
                 <u>Shuta Kikuchi</u><sup>†</sup>, Keisuke Nakajima<sup>†</sup>, Yasuki Kato, Takeshi Takizawa, Junichi Sugiyama, Taisei Mukai, Yasushi Kakizawa, and Setsuya Kurahashi<br>
                 <em>PLOS ONE</em>, 20(2), e0313364, 2025.<br>
+                <span class="badge peer" title="査読あり / Peer-reviewed">
+                  <i class="icon solid fa-check-circle"></i> Peer-reviewed
+                </span>
                 doi: <a href="https://doi.org/10.1371/journal.pone.0313364" target="_blank" rel="noopener">10.1371/journal.pone.0313364</a>
                 <div style="font-size: 0.9em; margin-top: 0.25rem;">
                   <sup>†</sup> These authors contributed equally to this work.
