@@ -106,13 +106,23 @@
                 <strong>Evaluation of the Effects of Integer Assignment on the RNA Inverse Folding Problem Using Factorization Machine with Annealing</strong><br>
                 <u>Shuta Kikuchi</u>, Shu Tanaka<br>
                 <em>International Network on Quantum Annealing (INQA) Conference 2025</em>, Nov 3, 2025.
-                <div class="yt-wrap">
-                  <div class="yt" data-id="VIDEO_ID_HERE"></div>
-                  <noscript>
-                    <a class="yt-card" href="https://www.youtube.com/watch?v=MyHFuwEnRvc" target="_blank" rel="noopener">
-                      <img src="https://img.youtube.com/vi/MyHFuwEnRvc/hqdefault.jpg" alt="Video thumbnail">
+                  <div class="yt-wrap">
+                  <!-- URLでもIDでもOK（下のJSがID抽出します） -->
+                  <a class="yt" data-id="https://www.youtube.com/watch?v=MyHFuwEnRvc">
+                    <span class="yt-card">
+                      <span class="yt-thumb">
+                        <img src="https://img.youtube.com/vi/MyHFuwEnRvc/hqdefault.jpg" alt="YouTube thumbnail">
+                        <span class="yt-play" aria-hidden="true">
+                          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </span>
+                      </span>
+                    </span>
+                  </a>
+                  <div style="font-size:.9em;margin-top:.25rem;">
+                    <a class="yt-fallback" href="https://www.youtube.com/watch?v=MyHFuwEnRvc" target="_blank" rel="noopener">
+                      ▶ Open on YouTube
                     </a>
-                  </noscript>
+                  </div>
                 </div>
               </li>
               
@@ -499,61 +509,66 @@
     <script src="assets/js/util.js"></script>
     <script src="assets/js/main.js"></script>
 
-
     <script>
-    (function () {
-      function buildThumb(id) {
-        var wrap = document.createElement('a');
-        wrap.className = 'yt-card yt-thumb';
-        wrap.href = 'https://www.youtube.com/watch?v=' + id;
-        wrap.target = '_blank';
-        wrap.rel = 'noopener';
-  
-        var img = document.createElement('img');
-        img.loading = 'lazy';
-        img.alt = 'YouTube thumbnail';
-        img.src = 'https://img.youtube.com/vi/' + id + '/hqdefault.jpg';
-  
-        var play = document.createElement('span');
-        play.className = 'yt-play';
-        play.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
-  
-        wrap.appendChild(img);
-        wrap.appendChild(play);
-        return wrap;
+    (function(){
+      // どの形式のURLでも動画IDを抜き出す関数
+      function extractYouTubeID(input){
+        if(!input) return null;
+        // すでにIDっぽい（11文字の英数-_）ならそのまま
+        if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
+    
+        try {
+          var u = new URL(input);
+          // 標準watch
+          if (u.hostname.includes('youtube.com') && u.pathname === '/watch') {
+            return u.searchParams.get('v');
+          }
+          // /embed/ID
+          var m = u.pathname.match(/\/embed\/([a-zA-Z0-9_-]{11})/);
+          if (m) return m[1];
+          // youtu.be/ID
+          m = u.hostname.includes('youtu.be') ? u.pathname.match(/\/([a-zA-Z0-9_-]{11})/) : null;
+          if (m) return m[1];
+          // shorts/ID
+          m = u.pathname.match(/\/shorts\/([a-zA-Z0-9_-]{11})/);
+          if (m) return m[1];
+        } catch(e){
+          // 入力がURLでなければスルー
+        }
+        return null;
       }
-  
-      function buildIframe(id) {
+    
+      function toEmbed(el){
+        var raw = el.getAttribute('data-id');
+        var id = extractYouTubeID(raw);
+        if(!id){ console.warn('YouTube ID not found for', raw); return; }
+    
+        // 埋め込みiframe
         var iframe = document.createElement('iframe');
-        iframe.width = '560';
-        iframe.height = '315';
-        iframe.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0';
+        iframe.width = el.offsetWidth || 560;
+        iframe.height = Math.round(iframe.width * 9/16);
+        // 一部環境で nocookie がブロックされるため youtube.com を採用
+        // 必要に応じて rel=0, modestbranding=1 等も付与
+        iframe.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&playsinline=1&rel=0&modestbranding=1';
         iframe.title = 'YouTube video player';
-        iframe.frameBorder = '0';
         iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
         iframe.allowFullscreen = true;
-        iframe.style.maxWidth = '100%';
-        return iframe;
+        // 置換
+        el.parentNode.replaceChild(iframe, el);
+    
+        // フォールバックリンクも更新（URL/ID混在でも常に正しく飛ぶように）
+        var wrap = iframe.closest('.yt-wrap');
+        var fb = wrap ? wrap.querySelector('.yt-fallback') : null;
+        if (fb) fb.href = 'https://www.youtube.com/watch?v=' + id;
       }
-  
-      // すべての .yt を初期化
-      document.querySelectorAll('.yt').forEach(function (el) {
-        var id = el.getAttribute('data-id');
-        if (!id) return;
-  
-        var thumb = buildThumb(id);
-        // その場再生にしたい場合は a のデフォルト遷移を止めて iframe に置換
-        thumb.addEventListener('click', function (ev) {
-          ev.preventDefault();
-          var iframe = buildIframe(id);
-          el.innerHTML = '';
-          el.appendChild(iframe);
-        });
-  
-        el.appendChild(thumb);
-      });
+    
+      document.addEventListener('click', function(e){
+        var a = e.target.closest('a.yt');
+        if(!a) return;
+        e.preventDefault(); toEmbed(a);
+      }, {passive:false});
     })();
-  </script>
+    </script>
     
   </body>
 </html>
