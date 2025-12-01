@@ -12,6 +12,26 @@
       .toc li { display:inline; margin-right:1rem; }
       .toc a { text-decoration:none; border-bottom:1px dashed; }
       h3, h4 { scroll-margin-top: 80px; }
+
+      /* YouTubeサムネイルカード */
+      .yt-card { display:inline-block; margin:.4rem 0 0; border-radius:.5rem; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.15); cursor:pointer; }
+      .yt-thumb { position:relative; display:block; width:320px; max-width:100%; line-height:0; }
+      .yt-thumb img { display:block; width:100%; height:auto; }
+      /* 再生アイコン */
+      .yt-thumb::after{
+        content:"";
+        position:absolute; inset:0;
+        background: radial-gradient(circle at center, rgba(0,0,0,.0) 40%, rgba(0,0,0,.3));
+      }
+      .yt-play {
+        position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+        width:64px; height:64px; border-radius:50%;
+        background: rgba(0,0,0,.6);
+        display:flex; align-items:center; justify-content:center;
+      }
+      .yt-play svg { width:28px; height:28px; fill:white; margin-left:4px; }
+      /* 余白調整（リスト内で詰まりすぎないように） */
+      .yt-wrap { margin:.25rem 0 .6rem; }
     </style>
   </head>
   <body class="is-preload">
@@ -86,6 +106,14 @@
                 <strong>Evaluation of the Effects of Integer Assignment on the RNA Inverse Folding Problem Using Factorization Machine with Annealing</strong><br>
                 <u>Shuta Kikuchi</u>, Shu Tanaka<br>
                 <em>International Network on Quantum Annealing (INQA) Conference 2025</em>, Nov 3, 2025.
+                <div class="yt-wrap">
+                  <div class="yt" data-id="VIDEO_ID_HERE"></div>
+                  <noscript>
+                    <a class="yt-card" href="https://www.youtube.com/watch?v=MyHFuwEnRvc" target="_blank" rel="noopener">
+                      <img src="https://img.youtube.com/vi/MyHFuwEnRvc/hqdefault.jpg" alt="Video thumbnail">
+                    </a>
+                  </noscript>
+                </div>
               </li>
               
               <li>
@@ -470,5 +498,62 @@
     <script src="assets/js/breakpoints.min.js"></script>
     <script src="assets/js/util.js"></script>
     <script src="assets/js/main.js"></script>
+
+
+    <script>
+    (function () {
+      function buildThumb(id) {
+        var wrap = document.createElement('a');
+        wrap.className = 'yt-card yt-thumb';
+        wrap.href = 'https://www.youtube.com/watch?v=' + id;
+        wrap.target = '_blank';
+        wrap.rel = 'noopener';
+  
+        var img = document.createElement('img');
+        img.loading = 'lazy';
+        img.alt = 'YouTube thumbnail';
+        img.src = 'https://img.youtube.com/vi/' + id + '/hqdefault.jpg';
+  
+        var play = document.createElement('span');
+        play.className = 'yt-play';
+        play.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+  
+        wrap.appendChild(img);
+        wrap.appendChild(play);
+        return wrap;
+      }
+  
+      function buildIframe(id) {
+        var iframe = document.createElement('iframe');
+        iframe.width = '560';
+        iframe.height = '315';
+        iframe.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0';
+        iframe.title = 'YouTube video player';
+        iframe.frameBorder = '0';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.allowFullscreen = true;
+        iframe.style.maxWidth = '100%';
+        return iframe;
+      }
+  
+      // すべての .yt を初期化
+      document.querySelectorAll('.yt').forEach(function (el) {
+        var id = el.getAttribute('data-id');
+        if (!id) return;
+  
+        var thumb = buildThumb(id);
+        // その場再生にしたい場合は a のデフォルト遷移を止めて iframe に置換
+        thumb.addEventListener('click', function (ev) {
+          ev.preventDefault();
+          var iframe = buildIframe(id);
+          el.innerHTML = '';
+          el.appendChild(iframe);
+        });
+  
+        el.appendChild(thumb);
+      });
+    })();
+  </script>
+    
   </body>
 </html>
