@@ -468,13 +468,32 @@
               <li>
                 <strong>Enhancing the Performance of Quantum Annealing Machines</strong><br>
                 <u>Shuta Kikuchi</u>, Shu Tanaka<br>
-                <em>UK-Japan Quantum Technology Networking Fair 2024</em>, 2024年12月6日
+                <em>UK-Japan Quantum Technology Networking Fair 2024</em>, Dec 6, 2024.
+                <div class="yt-wrap">
+                  <!-- data-id は純粋なID。開始・終了は秒でも「23:09」「25:40」でもOK -->
+                  <a class="yt" data-id="O3TPk81OSJ0" data-start="23:09" data-end="25:40">
+                    <span class="yt-card">
+                      <span class="yt-thumb">
+                        <img src="https://img.youtube.com/vi/O3TPk81OSJ0/hqdefault.jpg" alt="YouTube thumbnail">
+                        <span class="yt-play" aria-hidden="true">
+                          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </span>
+                      </span>
+                    </span>
+                  </a>
+                  <div style="font-size:.9em;margin-top:.25rem;">
+                    <a class="yt-fallback" href="https://www.youtube.com/watch?v=O3TPk81OSJ0&t=23m09s" target="_blank" rel="noopener">
+                      ▶ Open on YouTube (23:09)
+                    </a>
+                    <span style="opacity:.75;margin-left:.5rem;">(Your segment: 23:09–25:40)</span>
+                  </div>
+                </div>
               </li>
 
               <li>
                 <strong>Performance evaluation of hybrid method using different types of Ising machines</strong><br>
                 <u>Shuta Kikuchi</u>, Nozomu Togawa, Shu Tanaka<br>
-                <em>Qubits2023</em>, 2023年1月19日
+                <em>Qubits2023</em>, Jan 19, 2023.
                 <div class="yt-wrap">
                   <!-- URLでもIDでもOK（下のJSがID抽出します） -->
                   <a class="yt" data-id="https://www.youtube.com/watch?v=rqhSTiNTOwo&list=PLj1XHZglGUD0FsH-ZZqQ5YJDNua6VQ7Jt&index=6">
@@ -565,31 +584,50 @@
 
     <script>
     (function(){
-      // どの形式のURLでも動画IDを抜き出す関数
       function extractYouTubeID(input){
         if(!input) return null;
-        // すでにIDっぽい（11文字の英数-_）ならそのまま
         if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
-    
         try {
           var u = new URL(input);
-          // 標準watch
           if (u.hostname.includes('youtube.com') && u.pathname === '/watch') {
             return u.searchParams.get('v');
           }
-          // /embed/ID
           var m = u.pathname.match(/\/embed\/([a-zA-Z0-9_-]{11})/);
           if (m) return m[1];
-          // youtu.be/ID
           m = u.hostname.includes('youtu.be') ? u.pathname.match(/\/([a-zA-Z0-9_-]{11})/) : null;
           if (m) return m[1];
-          // shorts/ID
           m = u.pathname.match(/\/shorts\/([a-zA-Z0-9_-]{11})/);
           if (m) return m[1];
-        } catch(e){
-          // 入力がURLでなければスルー
-        }
+        } catch(e){}
         return null;
+      }
+    
+      // "23:09" / "1:02:03" / "1389" / "23m9s" を秒に
+      function parseTimeToSeconds(t){
+        if(!t) return null;
+        if (/^\d+$/.test(t)) return parseInt(t,10);                // 純粋な秒
+        if (/^\d{1,2}:\d{2}(:\d{2})?$/.test(t)) {                   // mm:ss or hh:mm:ss
+          var p = t.split(':').map(Number);
+          if (p.length === 2) return p[0]*60 + p[1];
+          if (p.length === 3) return p[0]*3600 + p[1]*60 + p[2];
+        }
+        // 例: 23m9s, 1h2m3s
+        var h = /(\d+)h/.exec(t), m = /(\d+)m/.exec(t), s = /(\d+)s/.exec(t);
+        if (h || m || s) return (h?+h[1]*3600:0) + (m?+m[1]*60:0) + (s?+s[1]:0);
+        return null;
+      }
+    
+      // URL の t/start/end も拾う（保険）
+      function extractStartEndFromURL(raw){
+        var start=null, end=null;
+        try{
+          var u = new URL(raw);
+          var t = u.searchParams.get('t') || u.searchParams.get('start');
+          var e = u.searchParams.get('end');
+          start = parseTimeToSeconds(t);
+          end   = parseTimeToSeconds(e);
+        }catch(e){}
+        return {start:start, end:end};
       }
     
       function toEmbed(el){
@@ -597,23 +635,36 @@
         var id = extractYouTubeID(raw);
         if(!id){ console.warn('YouTube ID not found for', raw); return; }
     
-        // 埋め込みiframe
+        // data-* が優先、無ければURLから拾う
+        var ds = el.getAttribute('data-start');
+        var de = el.getAttribute('data-end');
+        var start = parseTimeToSeconds(ds);
+        var end   = parseTimeToSeconds(de);
+        if (start==null || end==null){
+          var fromURL = extractStartEndFromURL(raw);
+          if (start==null) start = fromURL.start;
+          if (end==null)   end   = fromURL.end;
+        }
+    
         var iframe = document.createElement('iframe');
         iframe.width = el.offsetWidth || 560;
         iframe.height = Math.round(iframe.width * 9/16);
-        // 一部環境で nocookie がブロックされるため youtube.com を採用
-        // 必要に応じて rel=0, modestbranding=1 等も付与
-        iframe.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&playsinline=1&rel=0&modestbranding=1';
+        var src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&playsinline=1&rel=0&modestbranding=1';
+        if (start!=null) src += '&start=' + start;
+        if (end!=null)   src += '&end=' + end;
+        iframe.src = src;
         iframe.title = 'YouTube video player';
         iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
         iframe.allowFullscreen = true;
-        // 置換
+    
         el.parentNode.replaceChild(iframe, el);
     
-        // フォールバックリンクも更新（URL/ID混在でも常に正しく飛ぶように）
         var wrap = iframe.closest('.yt-wrap');
         var fb = wrap ? wrap.querySelector('.yt-fallback') : null;
-        if (fb) fb.href = 'https://www.youtube.com/watch?v=' + id;
+        if (fb) {
+          var q = 'https://www.youtube.com/watch?v=' + id + (start!=null ? '&t=' + start + 's' : '');
+          fb.href = q;
+        }
       }
     
       document.addEventListener('click', function(e){
