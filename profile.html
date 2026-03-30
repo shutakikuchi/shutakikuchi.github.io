@@ -6,67 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="assets/css/main.css" />
 
-    	<style>	
-		  /* 本文トップのプロフィール部分 */
-			#main .container {
-			  width: min(96%, 1200px);
-			  max-width: 1200px;
-			}
-			
-			.profile-top {
-			  display: flex;
-			  align-items: flex-start;
-			  gap: 1.5rem;
-			}
-			
-			.profile-text {
-			  flex: 1 1 auto;
-			  min-width: 0;
-			}
-			
-			.profile-photo {
-			  width: 120px;
-			  flex: 0 0 120px;
-			}
-		
-		  .profile-photo img {
-		    width: 100%;
-		    height: auto;
-		    border-radius: 12px;
-		    display: block;
+	  <style>
+		  /* 左サイドバーを細くする */
+		  #header {
+		    width: 19rem;
 		  }
-
-			.image.main {
-			  width: calc(100% + 0rem);
-			  margin-left: 0rem;
-			  margin-right: 0rem;
-			}
-			
-			.image.main img {
-			  display: block;
-			  width: 100%;
-			  height: 100%;
-			  object-fit: cover;
-			}
 		
-		  /* スマホでは縦並び */
-		  @media screen and (max-width: 980px) {
-		    #header {
-		      width: 100%;
-		    }
-		
-		    #wrapper {
-		      margin-left: 0;
-		    }
-		
-		    .profile-top {
-		      flex-direction: column;
-		    }
-		
-		    .profile-photo {
-		      width: 140px;
-		    }
+		  /* サイドバー内の文字を少し小さく */
+		  #header h1 {
+		    font-size: 1.4rem;
 		  }
+		
+		  #header p,
+		  #header nav ul li a {
+		    font-size: 0.9rem;
+		  }		
       </style>
   </head>
   <body class="is-preload">
