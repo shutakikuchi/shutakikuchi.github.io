@@ -11,13 +11,84 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<meta name="google-site-verification" content="z_tpbORXkurFCc_DQxr0mQStRULiR03ON10h-pTrB6Q" />
+
+		<style>
+		  /* 左サイドバーを細くする */
+		  #header {
+		    width: 19rem;
+		  }
+		
+		  /* 本文の開始位置を調整 */
+		  #wrapper {
+		    margin-left: 19rem;
+		  }
+		
+		  /* サイドバー内の顔写真を非表示 */
+		  #header .image.avatar {
+		    display: none;
+		  }
+		
+		  /* サイドバー内の文字を少し小さく */
+		  #header h1 {
+		    font-size: 1.4rem;
+		  }
+		
+		  #header p,
+		  #header nav ul li a {
+		    font-size: 0.9rem;
+		  }
+		
+		  /* 本文トップのプロフィール部分 */
+		  .profile-top {
+		    display: flex;
+		    align-items: flex-start;
+		    justify-content: space-between;
+		    gap: 2rem;
+		  }
+		
+		  .profile-text {
+		    flex: 1;
+		    min-width: 0;
+		  }
+		
+		  .profile-photo {
+		    width: 180px;
+		    flex-shrink: 0;
+		  }
+		
+		  .profile-photo img {
+		    width: 100%;
+		    height: auto;
+		    border-radius: 12px;
+		    display: block;
+		  }
+		
+		  /* スマホでは縦並び */
+		  @media screen and (max-width: 980px) {
+		    #header {
+		      width: 100%;
+		    }
+		
+		    #wrapper {
+		      margin-left: 0;
+		    }
+		
+		    .profile-top {
+		      flex-direction: column;
+		    }
+		
+		    .profile-photo {
+		      width: 140px;
+		    }
+		  }
+		</style>
 	</head>
 	<body class="is-preload">
 
 		<!-- Header -->
 			<section id="header">
 				<header>
-					<span class="image avatar"><img src="images/for_researchmap.png" alt="" /></span>
+					<-- <span class="image avatar"><img src="images/for_researchmap.png" alt="" /></span> -->
 					<h1 id="logo"><a href="#">Shuta Kikuchi</a></h1>
 					<p>Project Assistant Professor,<br />
 					Keio University</p>
@@ -65,23 +136,46 @@
 							  <img src="images/banner.jpg" alt="" />
 							</div>
 							<div class="container">
-								<header class="major">
-									<h2>Shuta Kikuchi / 菊池 脩太</h2>
-									<p>Project Assistant Professor, 
-										<a href="https://shutanaka.appi.keio.ac.jp/">Shu Tanaka Lab.</a>, <br />
-										<a href="https://www.st.keio.ac.jp/">Graduate School of Science and Technology, 
-										Keio University</a> <br />
-									    <a href="https://www.st.keio.ac.jp/">慶應義塾大学大学院 理工学研究科</a> <a href="https://shutanaka.appi.keio.ac.jp/">田中宗研究室</a> 特任助教</p>
-								</header>
-								<p><a href="https://sqai.jp/member/">Researcher</a>, <a href="https://www.kgri.keio.ac.jp/project/research-centers/2024/A24-24.html">Keio University Sustainable Quantum Artificial Intelligence Center (KSQAIC), Keio University</a><br />
-									<a href="https://www.kgri.keio.ac.jp/project/research-centers/2024/A24-24.html">慶應義塾大学サスティナブル量子AI研究センター</a> <a href="https://sqai.jp/member/">研究員</a><br />
-								Part-time Lecturer, School of Informatics, College of Information Science, University of Tsukuba<br />
-									筑波大学 情報学群情報科学類 非常勤講師</p>
-								<p>E-mail:kikuchi.shuta[at]keio.jp</p>
-								<p><a href="https://researchmap.jp/shuta_kikuchi">Researchmap</a><br />
-								<a href="https://scholar.google.com/citations?user=M4RGEwcAAAAJ&hl=ja&oi=ao">Google Scholar</a><br />
-								<a href="https://orcid.org/0009-0002-1319-6834">ORCID</a><br />
-								<a href="https://www.linkedin.com/in/shutakikuchi/">LinkedIn</a></p>
+							  <div class="profile-top">
+							    <div class="profile-text">
+							      <header class="major">
+							        <h2>Shuta Kikuchi / 菊池 脩太</h2>
+							        <p>
+							          Project Assistant Professor,
+							          <a href="https://shutanaka.appi.keio.ac.jp/">Shu Tanaka Lab.</a>, <br />
+							          <a href="https://www.st.keio.ac.jp/">Graduate School of Science and Technology, Keio University</a><br />
+							          <a href="https://www.st.keio.ac.jp/">慶應義塾大学大学院 理工学研究科</a>
+							          <a href="https://shutanaka.appi.keio.ac.jp/">田中宗研究室</a> 特任助教
+							        </p>
+							      </header>
+							
+							      <p>
+							        <a href="https://sqai.jp/member/">Researcher</a>,
+							        <a href="https://www.kgri.keio.ac.jp/project/research-centers/2024/A24-24.html">
+							          Keio University Sustainable Quantum Artificial Intelligence Center (KSQAIC), Keio University
+							        </a><br />
+							        <a href="https://www.kgri.keio.ac.jp/project/research-centers/2024/A24-24.html">
+							          慶應義塾大学サスティナブル量子AI研究センター
+							        </a>
+							        <a href="https://sqai.jp/member/">研究員</a><br />
+							        Part-time Lecturer, School of Informatics, College of Information Science, University of Tsukuba<br />
+							        筑波大学 情報学群情報科学類 非常勤講師
+							      </p>
+							
+							      <p>E-mail: kikuchi.shuta[at]keio.jp</p>
+							
+							      <p>
+							        <a href="https://researchmap.jp/shuta_kikuchi">Researchmap</a><br />
+							        <a href="https://scholar.google.com/citations?user=M4RGEwcAAAAJ&hl=ja&oi=ao">Google Scholar</a><br />
+							        <a href="https://orcid.org/0009-0002-1319-6834">ORCID</a><br />
+							        <a href="https://www.linkedin.com/in/shutakikuchi/">LinkedIn</a>
+							      </p>
+							    </div>
+							
+							    <div class="profile-photo">
+							      <img src="images/for_researchmap.png" alt="Shuta Kikuchi" />
+							    </div>
+							  </div>
 							</div>
 
 						
