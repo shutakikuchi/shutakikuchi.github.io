@@ -56,24 +56,34 @@
 			  object-fit: cover;
 			}
 		
-		  /* スマホでは縦並び */
-		  @media screen and (max-width: 980px) {
-		    #header {
-		      width: 100%;
-		    }
+		  /* タブレット・スマートフォン */
+		@media screen and (max-width: 1024px) {
 		
-		    #wrapper {
-		      margin-left: 0;
-		    }
-		
-		    .profile-top {
-		      flex-direction: column;
-		    }
-		
-		    .profile-photo {
-		      width: 140px;
-		    }
+		  /* プロフィールを縦並びにする */
+		  .profile-top {
+			flex-direction: column;
+			gap: 1rem;
 		  }
+		
+		  /* 顔写真 */
+		  .profile-photo {
+			width: 140px;
+			flex: 0 0 auto;
+		  }
+		
+		  /* 本文は画面幅に合わせる */
+		  #main .container {
+			width: 94%;
+			max-width: none;
+		  }
+		
+		  /* バナー画像 */
+		  .image.main {
+			width: 100%;
+			margin-left: 0;
+			margin-right: 0;
+		  }
+		}
 		</style>
 	</head>
 	<body class="is-preload">
